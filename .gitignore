@@ -4,3 +4,8 @@ obj
 
 # mstest test results
 TestResults
+
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/tmp
+/.idea/*
