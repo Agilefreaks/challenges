@@ -29,17 +29,53 @@ class SubsequentWeighting
     end
   end
 
+  def find_index(list, value)
+    index = 0
+    stack = [{:start => 0, :end => list.length}]
+
+    until stack.empty?
+      point = stack.pop()
+
+      if point[:start] >= point[:end]
+        index = point[:start]
+        break
+      end
+
+      index = (point[:start] + point[:end]) / 2
+
+      if list[index].value == value
+        # done
+        index -= 1 if index > 0
+      elsif list[index].value < value
+        # search up
+        stack.push({:start => index + 1, :end => point[:end]})
+      else
+        # search down
+        stack.push({:start => point[:start], :end => index - 1})
+      end
+    end
+
+    if index == list.length
+      index = list.length - 1
+    end
+
+    if list[index].value > value
+      index - 1
+    else
+      index
+    end
+  end
+
   def parse
     list = [Node.new(0, 0)]
     maxim = 0
 
-    nodes.each do |input_node|
-      index = list.rindex { |el| el.value < input_node.value  } || 0
+    nodes.each do |node|
+      index = find_index(list, node.value)
 
-      node = Node.new(input_node.value, list[index].weight + input_node.weight)
+      node.weight += list[index].weight
       add = true
       to_be_deleted = []
-
 
       (index + 1).upto(list.length - 1) do |i|
         if list[i].value == node.value && list[i].weight >= node.weight
@@ -66,9 +102,9 @@ class SubsequentWeighting
   end
 end
 
-time = Benchmark.measure do
-  #input = STDIN
-  input = File.new("input04.txt", "r")
+#time = Benchmark.measure do
+  input = STDIN
+  #input = File.new("input07.txt", "r")
   number_of_test_cases = input.gets.chomp().to_i
 
   number_of_test_cases.times do
@@ -81,6 +117,6 @@ time = Benchmark.measure do
 
     STDOUT.puts parser.parse
   end
-end
+#end
 
-puts time
+#puts time

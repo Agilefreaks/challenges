@@ -67,5 +67,45 @@ describe SubsequentWeighting do
 
       subject.parse().should == 90
     end
+
+    it "should parse" do
+      subject.nodes << Node.new(110925242, 314423693) << Node.new(201639028, 873602173) << Node.new(556332723, 781795859) << Node.new(933170582, 204866864) << Node.new(91473533, 426547185)
+      subject.nodes << Node.new(797815483, 265986717) << Node.new(915476633, 170924814)
+
+      subject.parse()
+    end
+  end
+
+  describe :find_index do
+    it "should return the index of the closes number" do
+      list = []
+      list << Node.new(1, 10) << Node.new(2, 10) << Node.new(5, 20) << Node.new(8, 30)
+
+      subject.find_index(list, 3).should == 1
+    end
+    it "should return the index of the lower number" do
+      list = []
+      list << Node.new(1, 10) << Node.new(3, 10) << Node.new(5, 20) << Node.new(8, 30)
+
+      subject.find_index(list, 3).should == 1
+    end
+    it "should return the first element" do
+      list = []
+      list << Node.new(0, 0)
+
+      subject.find_index(list, 3).should == 0
+    end
+    it "should return the last element" do
+      list = []
+      list << Node.new(0, 0) << Node.new(1, 10) << Node.new(2, 20)
+
+      subject.find_index(list, 3).should == 2
+    end
+    it "should work" do
+      list = []
+      list << Node.new(1, 0) << Node.new(2, 10)
+
+      subject.find_index(list, 1).should == 0
+    end
   end
 end
