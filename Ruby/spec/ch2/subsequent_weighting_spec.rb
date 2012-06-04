@@ -85,7 +85,7 @@ describe SubsequentWeighting do
     end
     it "should return the index of the lower number" do
       list = []
-      list << Node.new(1, 10) << Node.new(3, 10) << Node.new(5, 20) << Node.new(8, 30)
+      list << Node.new(0, 0) << Node.new(1, 10) << Node.new(3, 10) << Node.new(5, 20) << Node.new(8, 30)
 
       subject.find_index(list, 3).should == 1
     end
@@ -103,7 +103,13 @@ describe SubsequentWeighting do
     end
     it "should work" do
       list = []
-      list << Node.new(1, 0) << Node.new(2, 10)
+      list << Node.new(0, 0) << Node.new(1, 0) << Node.new(2, 10)
+
+      subject.find_index(list, 1).should == 0
+    end
+    it "shoud work with equal elements" do
+      list = []
+      list << Node.new(0, 0) << Node.new(1, 10) << Node.new(2, 20) << Node.new(3, 30) << Node.new(4, 40)
 
       subject.find_index(list, 1).should == 0
     end

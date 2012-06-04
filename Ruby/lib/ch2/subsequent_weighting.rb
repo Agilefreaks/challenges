@@ -31,27 +31,19 @@ class SubsequentWeighting
 
   def find_index(list, value)
     index = 0
-    stack = [{:start => 0, :end => list.length}]
+    lower = 0
+    upper = list.size - 1
 
-    until stack.empty?
-      point = stack.pop()
-
-      if point[:start] >= point[:end]
-        index = point[:start]
-        break
-      end
-
-      index = (point[:start] + point[:end]) / 2
+    while upper >= lower do
+      index = (lower + upper) / 2
 
       if list[index].value == value
-        # done
         index -= 1 if index > 0
+        break
       elsif list[index].value < value
-        # search up
-        stack.push({:start => index + 1, :end => point[:end]})
+        lower = index + 1
       else
-        # search down
-        stack.push({:start => point[:start], :end => index - 1})
+        upper = index - 1
       end
     end
 
@@ -59,7 +51,7 @@ class SubsequentWeighting
       index = list.length - 1
     end
 
-    if list[index].value > value
+    if list[index].value >= value
       index - 1
     else
       index
@@ -104,7 +96,7 @@ end
 
 #time = Benchmark.measure do
   input = STDIN
-  #input = File.new("input07.txt", "r")
+  #input = File.new("input05.txt", "r")
   number_of_test_cases = input.gets.chomp().to_i
 
   number_of_test_cases.times do
