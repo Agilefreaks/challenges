@@ -31,33 +31,42 @@ class SubsequentWeighting
 
   def parse
     root = Node.new(0, 0)
+    list = [root]
     maxim = 0
 
     tuplets.each do |tuplet|
-      stack = []
-      stack.push(root)
-      best_child = root
+      index = 0
 
-      until stack.empty? do
-        child = stack.pop
-
-        child.children.each do |grand|
-          if grand.value < tuplet[:value]
-            stack.push grand
-          end
-        end
-
-        if child.value < tuplet[:value] && best_child.total < child.total
-          best_child = child
+      (list.length - 1).downto(0) do |i|
+        if list[i].value < tuplet[:value]
+          index = i
+          break
         end
       end
 
-      node = Node.new(tuplet[:value], tuplet[:weight])
-      node.total = best_child.total + tuplet[:weight]
+      node = Node.new(tuplet[:value], list[index].weight + tuplet[:weight])
+      add = true
+      to_be_deleted = []
 
-      maxim = node.total if maxim < node.total
+      (index + 1).upto(list.length - 1) do |i|
+        if list[i].value == node.value && list[i].weight >= node.weight
+          add = false
+          break
+        elsif list[i].weight <= node.weight
+          to_be_deleted << list[i]
+        else
+          break
+        end
+      end
 
-      best_child.children << node
+      to_be_deleted.each do |el|
+        list.delete(el)
+      end
+
+      if add
+        list.insert(index + 1, node)
+        maxim = node.weight if maxim < node.weight
+      end
     end
 
     maxim
@@ -77,7 +86,7 @@ time = Benchmark.measure do
     parser.add_values(input.gets.chomp.split)
     parser.add_weights(input.gets.chomp.split)
 
-    STDOUT.puts parser.parse2
+    STDOUT.puts parser.parse
   end
 end
 

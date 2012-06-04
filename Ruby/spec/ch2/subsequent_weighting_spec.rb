@@ -43,7 +43,7 @@ describe SubsequentWeighting do
       subject.tuplets << {:value => 3, :weight => 30}
       subject.tuplets << {:value => 4, :weight => 40}
 
-      subject.parse2().should == 100
+      subject.parse().should == 100
     end
 
     it "should be 110" do
@@ -56,7 +56,16 @@ describe SubsequentWeighting do
       subject.tuplets << {:value => 3, :weight => 15}
       subject.tuplets << {:value => 4, :weight => 50}
 
-      subject.parse2().should == 110
+      subject.parse().should == 110
+    end
+
+    it "should delete" do
+      subject.tuplets << {:value => 1, :weight => 10}
+      subject.tuplets << {:value => 8, :weight => 20}
+      subject.tuplets << {:value => 9, :weight => 30}
+      subject.tuplets << {:value => 3, :weight => 80}
+
+      subject.parse().should == 90
     end
   end
 end
