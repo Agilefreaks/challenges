@@ -38,32 +38,32 @@ describe SubsequentWeighting do
 
   describe :parse do
     it "should be 100" do
-      subject.tuplets << {:value => 1, :weight => 10}
-      subject.tuplets << {:value => 2, :weight => 20}
-      subject.tuplets << {:value => 3, :weight => 30}
-      subject.tuplets << {:value => 4, :weight => 40}
+      subject.nodes << Node.new(1, 10)
+      subject.nodes << Node.new(2, 20)
+      subject.nodes << Node.new(3, 30)
+      subject.nodes << Node.new(4, 40)
 
       subject.parse().should == 100
     end
 
     it "should be 110" do
-      subject.tuplets << {:value => 1, :weight => 10}
-      subject.tuplets << {:value => 2, :weight => 20}
-      subject.tuplets << {:value => 3, :weight => 30}
-      subject.tuplets << {:value => 4, :weight => 40}
-      subject.tuplets << {:value => 1, :weight => 15}
-      subject.tuplets << {:value => 2, :weight => 15}
-      subject.tuplets << {:value => 3, :weight => 15}
-      subject.tuplets << {:value => 4, :weight => 50}
+      subject.nodes << Node.new(1, 10)
+      subject.nodes << Node.new(2, 20)
+      subject.nodes << Node.new(3, 30)
+      subject.nodes << Node.new(4, 40)
+      subject.nodes << Node.new(1, 15)
+      subject.nodes << Node.new(2, 15)
+      subject.nodes << Node.new(3, 15)
+      subject.nodes << Node.new(4, 50)
 
       subject.parse().should == 110
     end
 
     it "should delete" do
-      subject.tuplets << {:value => 1, :weight => 10}
-      subject.tuplets << {:value => 8, :weight => 20}
-      subject.tuplets << {:value => 9, :weight => 30}
-      subject.tuplets << {:value => 3, :weight => 80}
+      subject.nodes << Node.new(1, 10)
+      subject.nodes << Node.new(8, 20)
+      subject.nodes << Node.new(9, 30)
+      subject.nodes << Node.new(2, 80)
 
       subject.parse().should == 90
     end

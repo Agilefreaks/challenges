@@ -10,43 +10,36 @@ class Node
 end
 
 class SubsequentWeighting
-  attr_reader :tuplets
+  attr_reader :nodes
 
   def initialize
-    @tuplets = []
+    @nodes = []
   end
 
   def add_values(input)
     input.each do |value|
-      tuplets << {:value => value.to_i()}
+      nodes << Node.new(value.to_i(), 0)
     end
   end
 
   # expect add_values to be called first with the same n
   def add_weights(input)
     input.length.times do |i|
-      tuplets[i][:weight] = input[i].to_i()
+      nodes[i].weight = input[i].to_i()
     end
   end
 
   def parse
-    root = Node.new(0, 0)
-    list = [root]
+    list = [Node.new(0, 0)]
     maxim = 0
 
-    tuplets.each do |tuplet|
-      index = 0
+    nodes.each do |input_node|
+      index = list.rindex { |el| el.value < input_node.value  } || 0
 
-      (list.length - 1).downto(0) do |i|
-        if list[i].value < tuplet[:value]
-          index = i
-          break
-        end
-      end
-
-      node = Node.new(tuplet[:value], list[index].weight + tuplet[:weight])
+      node = Node.new(input_node.value, list[index].weight + input_node.weight)
       add = true
       to_be_deleted = []
+
 
       (index + 1).upto(list.length - 1) do |i|
         if list[i].value == node.value && list[i].weight >= node.weight
