@@ -94,9 +94,9 @@ class SubsequentWeighting
   end
 end
 
-#time = Benchmark.measure do
-  input = STDIN
-  #input = File.new("input05.txt", "r")
+time = Benchmark.measure do
+  #input = STDIN
+  input = File.new("input07.txt", "r")
   number_of_test_cases = input.gets.chomp().to_i
 
   number_of_test_cases.times do
@@ -109,6 +109,6 @@ end
 
     STDOUT.puts parser.parse
   end
-#end
+end
 
-#puts time
+puts time
