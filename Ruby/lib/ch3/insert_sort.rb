@@ -1,5 +1,7 @@
+require "benchmark"
+
 class Node
-  attr_accessor :value, :occurrences, :children_count
+  attr_accessor :value, :occurrences, :children_count, :right, :left, :parent
 
   def initialize(value, occurrences = 1)
     @value = value
@@ -13,45 +15,48 @@ class InsertSort
     # skip over the number of elements
     input.gets()
     array = input.gets().split.map { |n| Node.new(n.to_i, 1) }
-    tree = []
+    tree = array.shift
     result = 0
 
-    array.each do |e|
-      i = 1
-      until tree[i].nil? do
-        if tree[i].value < e.value
-          # go right
-          i = 2*i + 1
-        elsif tree[i].value > e.value
-          result += tree[i].occurrences
+    while array.size > 0
+      e = array.shift
+      root = tree
+      parent = tree
+      until root.nil? do
+        if root.value < e.value
+          parent = root
+          root = root.right
+        elsif root.value > e.value
+          parent = root
+          result += root.occurrences
 
           # add right child occurrences
-          unless tree[2*i + 1].nil?
-            result += tree[2*i + 1].children_count + 1
-          end
+          result += root.right.children_count + root.right.occurrences unless root.right.nil?
 
-          # go left
-          i = 2*i
+          root = root.left
         else
+          # are equal
           # add right child occurrences
-          unless tree[2*i + 1].nil?
-            result += tree[2*i + 1].children_count + 1
-          end
+          result += root.right.children_count + root.right.occurrences unless root.right.nil?
 
           break
         end
       end
 
-      if tree[i].nil?
-        tree[i] = e
-      elsif tree[i].value == e.value
-        tree[i].occurrences += 1
+      if root
+        root.occurrences += 1
+      else
+        parent.right = e if parent.value < e.value
+        parent.left = e if parent.value > e.value
+        e.parent = parent
+        root = e
       end
 
       # increment children count
-      until tree[i / 2].nil?
-        tree[i / 2].children_count += 1
-        i /= 2
+      parent = root.parent
+      until parent.nil?
+        parent.children_count += 1
+        parent = parent.parent
       end
     end
 
@@ -59,11 +64,15 @@ class InsertSort
   end
 end
 
-input = STDIN
-#input = File.new("input02.txt", "r")
-number_of_test_cases = input.gets.chomp().to_i
-insert_sort = InsertSort.new
+time = Benchmark.measure do
+  #input = STDIN
+  input = File.new("input03.txt", "r")
+  number_of_test_cases = input.gets.chomp().to_i
+  insert_sort = InsertSort.new
 
-number_of_test_cases.times do
-  STDOUT.puts insert_sort.number_of_swaps(input)
+  number_of_test_cases.times do
+    STDOUT.puts insert_sort.number_of_swaps(input)
+  end
 end
+
+puts time
