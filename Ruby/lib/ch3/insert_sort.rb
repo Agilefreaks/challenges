@@ -182,11 +182,13 @@ class InsertSort
   end
 end
 
-input = STDIN
-#input = File.new("input03.txt", "r")
-number_of_test_cases = input.gets.chomp().to_i
-insert_sort = InsertSort.new
+time = Benchmark.measure do
+  input = STDIN
+  #input = File.new("input03.txt", "r")
+  number_of_test_cases = input.gets.chomp().to_i
+  insert_sort = InsertSort.new
 
-number_of_test_cases.times do
-  STDOUT.puts insert_sort.number_of_swaps(input)
+  number_of_test_cases.times do
+    STDOUT.puts insert_sort.number_of_swaps(input)
+  end
 end
