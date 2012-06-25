@@ -16,27 +16,25 @@ class Weapon
   end
 
   def can_swap?(index1, index2)
-    result = @swap_matrix[index1, index2] == 0 ? false : true
+    @swap_matrix[index1, index2] == 0 ? false : true
+  end
 
-    unless result
-      # check for indirect swap
-      row1 = @swap_matrix.row(index1)
-      row2 = @swap_matrix.row(index2)
-
-      row1.to_a.each_index do |index|
-        if row1[index] == 1 && row2[index] == 1
-          result = true
-          @swap_matrix[index1, index2] = 1
-          @swap_matrix[index2, index1] = 1
-          break
+  def fill_swap_matrix
+    0.upto(@swap_matrix.row_size - 1) do |k|
+      0.upto(@swap_matrix.row_size - 1) do |i|
+        0.upto(@swap_matrix.row_size - 1) do |j|
+          if @swap_matrix[i, k] == 1 && @swap_matrix[k, j] == 1
+            @swap_matrix[i, j] = 1
+          end
         end
       end
-    end
 
-    result
+    end
   end
 
   def calibrate
+    fill_swap_matrix
+
     0.upto(@configuration.length - 1) do |i|
       (i + 1).upto(@configuration.length - 1) do |j|
         if @configuration[i] > @configuration[j] && can_swap?(i, j)

@@ -17,21 +17,17 @@ describe Weapon do
                                    [0, 1, 0]]
       subject.can_swap?(0, 0).should == false
     end
-    it "should return true for indirect swaps" do
+  end
+
+  describe :fill_swap_matrix do
+    it "should return for indirect swaps" do
       subject.swap_matrix = Matrix[[0, 0, 1],
                                    [0, 0, 1],
                                    [1, 1, 0]]
-      subject.can_swap?(0, 1).should == true
-      subject.swap_matrix[0, 1].should == 1
-      subject.swap_matrix[1, 0].should == 1
-    end
-    it "should return true for inverse indirect swaps" do
-      subject.swap_matrix = Matrix[[0, 0, 1],
-                                   [0, 0, 1],
-                                   [1, 1, 0]]
-      subject.can_swap?(1, 0).should == true
-      subject.swap_matrix[0, 1].should == 1
-      subject.swap_matrix[1, 0].should == 1
+      subject.fill_swap_matrix()
+      subject.swap_matrix.should == Matrix[[1, 1, 1],
+                                           [1, 1, 1],
+                                           [1, 1, 1]]
     end
   end
 
