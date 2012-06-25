@@ -1,5 +1,9 @@
 APP_ROOT = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 $: << File.join(APP_ROOT, "lib/ch1")
+$: << File.join(APP_ROOT, "lib/ch2")
+$: << File.join(APP_ROOT, "lib/ch3")
+$: << File.join(APP_ROOT, "lib/ch4")
+$: << File.join(APP_ROOT, "lib/ch5")
 
 RSpec.configure do |config|
   # ## Mock Framework
