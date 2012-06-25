@@ -40,3 +40,4 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 !nuget.exe
 CSharp/FraudDetection/packages/*
+*packages*
