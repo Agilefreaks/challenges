@@ -1,0 +1,3 @@
+class NuclearBombMan
+
+end
