@@ -1,5 +1,5 @@
 APP_ROOT = File.expand_path(File.join(File.dirname(__FILE__), ".."))
-(1..10).each do |i|
+(1..11).each do |i|
   $: << File.join(APP_ROOT, "lib/ch#{i}")
 end
 
