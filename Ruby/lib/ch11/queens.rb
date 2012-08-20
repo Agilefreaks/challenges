@@ -22,7 +22,7 @@ class Queens
       placed = false
 
       current_board.each_with_index do |line, index|
-        mask = ("1" + "0" * (columns - 1)).to_i
+        mask = ("1" + "0" * (columns - 1)).to_i(2)
         while line & mask == 0 && # can place
             board[index] & mask == 0 && # no obstacle
             mask != 0 # we are not done
