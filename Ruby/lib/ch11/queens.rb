@@ -15,28 +15,78 @@ class Queens
     result = 0
 
     stack = []
-    current_board = board
-    current_column = 0
+    current_board = board.dup
+    current_column = -1
     current_line = 0
 
-    if can_place?(current_board, current_line, current_column)
-      place(current_board, current_line, current_column)
-      result += 1
-      stack.push({ :board => current_board, :line => current_line, :column => current_column })
+    while true
+      current_line, current_column = move_next(current_line, current_column)
+
+      if !current_line.nil? && can_place?(current_board, current_line, current_column)
+        stack.push({ :board => current_board.dup, :line => current_line, :column => current_column })
+        current_board = place(current_board, current_line, current_column)
+        result += 1
+      elsif current_line.nil? && !stack.empty?
+        triplet = stack.pop
+        current_board = triplet[:board]
+        current_line = triplet[:line]
+        current_column = triplet[:column]
+      elsif stack.empty?
+        break
+      end
     end
-
-    current_line, current_column = move_next(current_line, current_column)
-
-    # add a queen on the next free position
-    # test if it's valid
-    # count the solution
-    # cary on
 
     result
   end
 
   def can_place?(board, line, column)
+    # search current line
+    return false if board[line] != 0
+
+    # debug information
+    #p "#{current_line}: #{position1} #{column} #{position3}"
+    #p board[current_line] & line_mask.to_i(2)
+
+    # search up
+    current_line = line
+    while current_line >= 0
+      position1 = column - (line - current_line)
+      position3 = column + (line - current_line)
+
+      line_mask = "0" * number_of_columns
+
+      line_mask[position1] = "1" if position1 >= 0
+      line_mask[position3] = "1" if position3 < @number_of_columns
+      line_mask[column] = "1"
+
+      return false if board[current_line] & line_mask.to_i(2) != 0
+
+      current_line -= 1
+    end
+
+    # search down
+    current_line = line
+    while current_line < @number_of_lines
+      position1 = column - (current_line - line)
+      position3 = column + (current_line - line)
+
+      line_mask = "0" * number_of_columns
+
+      line_mask[position1] = "1" if position1 >= 0
+      line_mask[position3] = "1" if position3 < @number_of_columns
+      line_mask[column] = "1"
+
+      return false if board[current_line] & line_mask.to_i(2) != 0
+
+      current_line += 1
+    end
+
     true
+  end
+
+  def place(board, line, column)
+    board[line] |= ("0" * column + "1" + "0" * (number_of_columns - column - 1)).to_i(2)
+    board
   end
 
   def move_next(line, column)
@@ -49,13 +99,5 @@ class Queens
     end
 
     [line, column]
-  end
-
-  def mark_attacked(line, column, current_board)
-    # mark the line
-
-    # mark the column
-
-    # mark the verticals
   end
 end

@@ -31,7 +31,7 @@ describe Queens do
     end
   end
 
-  describe "move_next" do
+  describe "#move_next" do
     before { subject.number_of_lines, subject.number_of_columns = 3, 3 }
     it "should move to the next column" do
       subject.move_next(1, 1).should == [1, 2]
@@ -41,6 +41,49 @@ describe Queens do
     end
     it "should return nil when there is no place to go" do
       subject.move_next(2, 2).should == [nil, nil]
+    end
+  end
+
+  describe "#place" do
+    it "should return the update board for first postion" do
+      subject.number_of_columns, subject.number_of_lines = 3, 3
+      3.times { subject.add_line("...") }
+      subject.place(subject.board, 0, 0)[0].should == 4
+    end
+    it "should return the update board for last position" do
+      subject.number_of_columns, subject.number_of_lines = 3, 3
+      3.times { subject.add_line("...") }
+      subject.place(subject.board, 2, 2)[2].should == 1
+    end
+  end
+
+  describe "#can_place?" do
+    before do
+      subject.number_of_columns, subject.number_of_lines = 3, 3
+      3.times { subject.add_line("...") }
+    end
+
+    let(:board) { subject.board }
+
+    it "should return true if no queen on the same line" do
+      subject.place(board, 0, 0)
+      subject.can_place?(board, 1, 2).should == true
+    end
+    it "should return false for queens placed on the same line" do
+      subject.place(board, 0, 0)
+      subject.can_place?(board, 0, 1).should == false
+    end
+    it "should return false for queens place on top of each other" do
+      subject.place(board, 0, 0)
+      subject.can_place?(board, 0, 0).should == false
+    end
+    it "should return false for diagonal attack upwards" do
+      subject.place(board, 0, 0)
+      subject.can_place?(board, 1, 1).should == false
+    end
+    it "should return false for diagonal attack downwords" do
+      subject.place(board, 2, 2)
+      subject.can_place?(board, 1, 1).should == false
     end
   end
 end
