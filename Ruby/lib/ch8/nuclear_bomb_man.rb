@@ -2,7 +2,7 @@ class NuclearBombMan
   attr_accessor :lines, :matched_lines, :matched_columns, :used
 
   def initialize(lines = [])
-    @lines = lines
+    @number_of_lines = lines
     @matched_lines = []
     @matched_columns = []
     @used = []
@@ -14,7 +14,7 @@ class NuclearBombMan
     @used[u] = true
 
     # direct match
-    @lines[u].each do |v|
+    @number_of_lines[u].each do |v|
       if @matched_columns[v].nil?
         @matched_lines[u] = v
         @matched_columns[v] = u
@@ -22,7 +22,7 @@ class NuclearBombMan
       end
     end
 
-    @lines[u].each do |v|
+    @number_of_lines[u].each do |v|
       if bfs(@matched_columns[v])
         @matched_lines[u] = v
         @matched_columns[v] = u
@@ -39,9 +39,9 @@ class NuclearBombMan
     while was_matched
 
       was_matched = false
-      0.upto(@lines.count - 1) { |index| @used[index] = false }
+      0.upto(@number_of_lines.count - 1) { |index| @used[index] = false }
 
-      0.upto(@lines.count - 1) do |index|
+      0.upto(@number_of_lines.count - 1) do |index|
         if @matched_lines[index].nil?
           was_matched ||= bfs(index)
         end
@@ -56,15 +56,15 @@ input = STDIN
 output = STDOUT
 
 number_of_lines, number_of_columns = input.gets().chomp().split.map { |i| i.to_i }
-@lines = []
+@number_of_lines = []
 0.upto(number_of_lines - 1) do |line_index|
   line = input.gets().chomp().split()
-  @lines[line_index] ||= []
+  @number_of_lines[line_index] ||= []
   line.each_with_index do |e, col_index|
     if e == '1'
-      @lines[line_index] << col_index
+      @number_of_lines[line_index] << col_index
     end
   end
 end
 
-output.puts NuclearBombMan.new(@lines).solve
+output.puts NuclearBombMan.new(@number_of_lines).solve

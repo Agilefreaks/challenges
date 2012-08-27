@@ -1,9 +1,9 @@
 class Queens
-  attr_accessor :columns, :lines, :board
+  attr_accessor :number_of_columns, :number_of_lines, :board
 
   def initialize(columns = 1, lines = 1)
-    @columns = columns
-    @lines = lines
+    @number_of_columns = columns
+    @number_of_lines = lines
     @board = []
   end
 
@@ -12,36 +12,43 @@ class Queens
   end
 
   def calculate
-    result = columns * lines
+    result = 0
 
-    number_of_queens = 2
+    stack = []
+    current_board = board
+    current_column = 0
+    current_line = 0
 
-    current_board = board.clone
-
-    number_of_queens.times do
-      placed = false
-
-      current_board.each_with_index do |line, index|
-        mask = ("1" + "0" * (columns - 1)).to_i(2)
-        while line & mask == 0 && # can place
-            board[index] & mask == 0 && # no obstacle
-            mask != 0 # we are not done
-          mask >>= 1
-        end
-
-        if mask != 0
-          # we placed the queen
-          placed = true
-
-          # mark all attacked squares
-          mark_attacked(line, column, current_board)
-        end
-      end
-
-      break unless placed
+    if can_place?(current_board, current_line, current_column)
+      place(current_board, current_line, current_column)
+      result += 1
+      stack.push({ :board => current_board, :line => current_line, :column => current_column })
     end
 
+    current_line, current_column = move_next(current_line, current_column)
+
+    # add a queen on the next free position
+    # test if it's valid
+    # count the solution
+    # cary on
+
     result
+  end
+
+  def can_place?(board, line, column)
+    true
+  end
+
+  def move_next(line, column)
+    if column < @number_of_columns - 1
+      column += 1
+    elsif line < @number_of_lines - 1
+      line, column = line + 1, 0
+    else
+      line, column = nil, nil
+    end
+
+    [line, column]
   end
 
   def mark_attacked(line, column, current_board)

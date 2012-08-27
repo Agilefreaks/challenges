@@ -37,24 +37,24 @@ describe :Polygon do
     it "should add a point to to a new line" do
       point = Point.new(0, 0)
       polygon.add_point(point)
-      polygon.lines.count.should == 1
-      polygon.lines.last.point1.should == point
+      polygon.number_of_lines.count.should == 1
+      polygon.number_of_lines.last.point1.should == point
     end
 
     it "should add a second point to the last line" do
       point = Point.new(0, 1)
-      polygon.lines << Line.new(Point.new(0, 0))
+      polygon.number_of_lines << Line.new(Point.new(0, 0))
       polygon.add_point(point)
-      polygon.lines.count.should == 1
-      polygon.lines.last.point2.should == point
+      polygon.number_of_lines.count.should == 1
+      polygon.number_of_lines.last.point2.should == point
     end
 
     it "should create a new line when point2 is set" do
       point2 = Point.new(0, 1)
-      polygon.lines << Line.new(Point.new(0, 0), point2)
+      polygon.number_of_lines << Line.new(Point.new(0, 0), point2)
       polygon.add_point(Point.new(1, 1))
-      polygon.lines.count.should == 2
-      polygon.lines.last.point1 == point2
+      polygon.number_of_lines.count.should == 2
+      polygon.number_of_lines.last.point1 == point2
     end
 
     it "should add line to vertical_lines" do
@@ -73,13 +73,13 @@ describe :Polygon do
   describe :close do
     it "should add a line to link last to first" do
       point1 = Point.new(0, 0)
-      polygon.lines << Line.new(point1, Point.new(0, 1))
+      polygon.number_of_lines << Line.new(point1, Point.new(0, 1))
       point2 = Point.new(3, 0)
-      polygon.lines << Line.new(Point.new(3, 3), point2)
+      polygon.number_of_lines << Line.new(Point.new(3, 3), point2)
       polygon.close
-      polygon.lines.count.should == 3
-      polygon.lines.last.point2.should == point1
-      polygon.lines.last.point1.should == point2
+      polygon.number_of_lines.count.should == 3
+      polygon.number_of_lines.last.point2.should == point1
+      polygon.number_of_lines.last.point1.should == point2
     end
   end
 

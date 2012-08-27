@@ -38,14 +38,14 @@ class Polygon
   attr_reader :lines, :vertical_lines
 
   def initialize
-    @lines = []
+    @number_of_lines = []
     @vertical_lines = []
     @max = 0
     @min = 0
   end
 
   def add_point(point)
-    line = @lines.last || add_line
+    line = @number_of_lines.last || add_line
 
     was_set = false
 
@@ -62,12 +62,12 @@ class Polygon
   end
 
   def close
-    last = @lines.last
+    last = @number_of_lines.last
 
     line = add_line
 
     line.point1 = last.point2
-    line.point2 = @lines.first.point1
+    line.point2 = @number_of_lines.first.point1
 
     update_verticals(line)
 
@@ -87,7 +87,7 @@ class Polygon
 
   def add_line(point = nil)
     line = Line.new
-    @lines << line
+    @number_of_lines << line
 
     line.point1 = point unless point.nil?
 
